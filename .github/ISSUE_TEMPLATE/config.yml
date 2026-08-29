@@ -1,0 +1,4 @@
+# Every issue in this repository uses the one template in this directory.
+# Blank issues are off so nothing lands without the eight sections and the
+# Severity · Effort trailer the DICOMPUTE board reads.
+blank_issues_enabled: false
