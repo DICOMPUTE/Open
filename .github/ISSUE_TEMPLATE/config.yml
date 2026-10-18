@@ -1,4 +1,17 @@
-# Every issue in this repository uses the one template in this directory.
-# Blank issues are off so nothing lands without the eight sections and the
-# Severity · Effort trailer the DICOMPUTE board reads.
+# Open's local ISSUE_TEMPLATE folder replaces the org defaults, so this folder
+# must carry the stranger-facing forms AND the four org contact_links.
+# Blank issues stay off. Do not change TRIAGE.md rules.
 blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/DICOMPUTE/.github/blob/main/SECURITY.md
+    about: Never file a vulnerability as a public issue. Use a private advisory or email security@dicompute.ai.
+  - name: Account, billing, or API key help
+    url: https://dicompute.ai/console
+    about: Anything account-specific is fastest to resolve in the console.
+  - name: Models and current pricing
+    url: https://dicompute.ai/models
+    about: Live model ids, capabilities, and per-token rates.
+  - name: Run GPUs and earn
+    url: https://dicompute.ai/earn
+    about: Operator onboarding, hardware guidance, and earnings.
