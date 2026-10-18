@@ -13,22 +13,25 @@ REPO="${GITHUB_REPOSITORY:?}"
 body="$(gh issue view "$NUMBER" --repo "$REPO" --json body --jq .body)"
 
 required=(What Why Prompt Workflow Loop Graph Layout Flow)
-pos=0
+# Every level-2 heading, in document order (fenced code blocks do not use
+# "## " at column zero in this tracker's issues).
+mapfile -t headings < <(printf '%s\n' "$body" | grep -oE '^## [A-Za-z][A-Za-z ]*' | sed 's/^## //; s/[[:space:]]*$//' || true)
+
 missing=()
-for h in "${required[@]}"; do
-  # match "## What" (allowing trailing whitespace/CR), from the last match on
-  found="$(printf '%s' "$body" | tail -c +$((pos + 1)) | grep -n -m1 -E "^## ${h}[[:space:]]*$" || true)"
-  if [ -z "$found" ]; then
-    missing+=("$h")
+cursor=0
+for want in "${required[@]}"; do
+  found=-1
+  for ((i = cursor; i < ${#headings[@]}; i++)); do
+    if [ "${headings[$i]}" = "$want" ]; then found=$i; break; fi
+  done
+  if [ "$found" -lt 0 ]; then
+    missing+=("$want")
   else
-    line="${found%%:*}"
-    # advance the search cursor past this heading: byte offset within the
-    # remaining slice, approximated by line count (headings are short lines)
-    pos=$((pos + line))
+    cursor=$((found + 1))
   fi
 done
 
-trailer="$(printf '%s' "$body" | grep -c -E 'Severity:[^[:alnum:]]*(Low|Medium|High|Critical)[^[:alnum:]]*·[^[:alnum:]]*Effort:' || true)"
+trailer="$(printf '%s\n' "$body" | grep -cE 'Severity:[^[:alnum:]]*(Low|Medium|High|Critical)[^[:alnum:]]*·[^[:alnum:]]*Effort:' || true)"
 
 has_label="$(gh issue view "$NUMBER" --repo "$REPO" --json labels --jq '[.labels[].name] | contains(["template-incomplete"])')"
 
