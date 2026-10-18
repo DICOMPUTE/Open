@@ -1,0 +1,20 @@
+name: issue-template-check
+# #1789: the tracker's TRIAGE/template contract had no checker -- template
+# violations reached the board unflagged. Runs on every issue open/edit and
+# enforces the eight-section shape + Severity/Effort trailer of
+# .github/ISSUE_TEMPLATE/issue.md via .github/scripts/check-issue-template.sh.
+on:
+  issues:
+    types: [opened, edited, reopened]
+permissions:
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: verify the template shape
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/check-issue-template.sh "${{ github.event.issue.number }}"
