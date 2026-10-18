@@ -1,0 +1,54 @@
+name: Bug report
+description: Something behaves incorrectly
+labels: ["type:bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. **If this is a security vulnerability, stop here**
+        and follow [SECURITY.md](https://github.com/DICOMPUTE/.github/blob/main/SECURITY.md) instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you observed, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps, commands, or a minimal request. Redact your API key.
+      placeholder: |
+        1. curl -sS ...
+        2. ...
+        3. Observed: ...
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model id
+      description: If the issue involves an inference call.
+      placeholder: qwen2.5-3b-instruct
+  - type: input
+    id: request_id
+    attributes:
+      label: Request id
+      description: If the API returned one — it makes this far faster to trace.
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: Client/SDK and version, OS, and anything else relevant.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: This is not a security vulnerability.
+          required: true
+        - label: I searched existing issues for a duplicate.
+          required: true
+        - label: I have removed API keys and other secrets from everything pasted above.
+          required: true
