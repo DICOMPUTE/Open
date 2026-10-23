@@ -71,3 +71,7 @@ stateDiagram-v2
 
 Severity · Effort
 Severity: [Low / Medium / High]  ·  Effort: [S / M / L]
+
+## License
+
+MIT, Copyright (c) 2026 DICOMPUTE (Anil Chinchawale). See [LICENSE](LICENSE). A pull request here is contributed under the same licence.
