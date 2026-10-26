@@ -1,6 +1,6 @@
 ---
-name: Issue
-about: "The one format every issue here uses: What / Why / Prompt / Workflow / Loop / Graph / Layout / Flow, ending with the Severity · Effort trailer."
+name: Engineering issue (team use)
+about: "Eight-section spec for the team: What / Why / Prompt / Workflow / Loop / Graph / Layout / Flow, ending with the Severity · Effort trailer. Strangers: use Bug report or Feature request."
 title: ""
 labels: ""
 assignees: ""
