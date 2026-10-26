@@ -1,0 +1,25 @@
+# Open#1789: shape check for the issue forms and the TRIAGE.md contract.
+# Read-only: it never comments on, labels or edits issues.
+name: tracker-shape
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: read
+jobs:
+  shape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml==6.0.2
+      - name: list repo labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh label list -R "$GITHUB_REPOSITORY" --limit 500 --json name --jq '.[].name' > /tmp/labels.txt
+      - run: python3 .github/scripts/check-tracker.py --labels /tmp/labels.txt
