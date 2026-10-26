@@ -16,3 +16,9 @@ follow existing work.
 Use **Bug report** or **Feature request** on the New issue page. **Engineering
 issue (team use)** is the internal eight-section spec; you do not need it to
 report a problem.
+
+## License
+
+MIT, copyright DICOMPUTE (Anil Chinchawale). See [LICENSE](LICENSE). Anything you
+contribute here (issue-form or doc changes in a pull request) is licensed under the
+same MIT terms (inbound equals outbound).
