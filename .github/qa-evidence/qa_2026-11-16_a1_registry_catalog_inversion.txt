@@ -1,0 +1,14 @@
+QA A1 evidence 2026-11-16 14:52-14:58 CST (UTC+8). KEYLESS, curl+python stdlib.
+
+LIVE SNAPSHOTS (all 200, generated_at 2026-11-16T06:52:58-59Z):
+GET /openai/v1/models            -> 5 models: qwen2.5-3b-instruct, qwen2.5-0.5b-instruct, bge-small-en-v1.5, jina-reranker-v1-tiny-en, embeddinggemma-2
+GET /v1/models/catalog           -> 5 models: embeddinggemma-2, medgemma-4b-it, qwen2.5-0.5b-instruct, qwen2.5-3b-instruct, ternary-bonsai-2-27b
+GET /openai/v1/models/catalog    -> 21 models (includes bge-small-en-v1.5 AND jina-reranker-v1-tiny-en AND medgemma-4b-it AND ternary-bonsai-2-27b)
+GET /openai/v1/openrouter/models -> 21 models, dicompute/ prefix, same set as /openai/v1/models/catalog
+GET /openai/v1/models/capacity   -> 21 rows; bge-small-en-v1.5 workers=1 healthy=1 can_accept=true; jina-reranker-v1-tiny-en workers=1 healthy=1 can_accept=true; medgemma-4b-it workers=0 healthy=0 can_accept=false; ternary-bonsai-2-27b workers=0 healthy=0 can_accept=false
+
+CONTRADICTION: /v1/models/catalog (a) includes two unservable models (medgemma-4b-it, ternary-bonsai-2-27b: 0 workers, can_accept=false) that the request-facing /openai/v1/models correctly omits, and (b) excludes two live-serving models (bge-small-en-v1.5, jina-reranker-v1-tiny-en: workers>=1 healthy, can_accept=true, max_concurrent=8) that BOTH other catalog surfaces list. Symmetric difference = 4 of 5 rows (only qwen2.5-3b, qwen2.5-0.5b, embeddinggemma-2 agree).
+
+NULL-METADATA CONTROL: in /openai/v1/models/catalog all four disputed rows carry min_ram_gb=null, quantization=null, size_gb=null, reachable=null -> an operator-metadata filter cannot explain the split.
+
+DOC CHECK: /docs/model-feeds.md (updated 2026-10-30) maps FIELD NAMES across the four feeds and states 'Four public, unauthenticated HTTP surfaces publish overlapping facts about' the models. It documents NO membership rule that would exclude serving models from the registry catalog while including dead ones.
