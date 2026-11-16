@@ -1,0 +1,13 @@
+QA A1 evidence 2026-11-16 15:05-15:07 CST (UTC+8). KEYLESS guest lane, python stdlib, single source IP.
+
+SEQUENCE (payload deliberately schema-invalid: {"message":"Say OK n"} -- endpoint requires a messages array):
+15:05:44 msg1 POST /api/chat -> 400 {"error":"invalid_request","message":"Request body must be a JSON object with a messages array."}
+15:05:45 msg2 POST /api/chat -> 400 (same invalid_request)
+15:05:46 msg3 POST /api/chat -> 400 (same invalid_request)
+15:05:47 msg4 POST /api/chat -> 429 {"error":"rate_limited","code":"guest_message_limit"} + retry-after: 57 + x-ratelimit-scope: client
+
+Zero valid guest messages were ever sent, yet the 3-per-minute guest message cap tripped on the 4th request.
+
+WINDOW RESET CHECK: waited retry-after (57s)+2, 15:06:46 POST /api/chat -> 400 invalid_request (NOT 429) -> counter had reset; quota accounting is a fixed window and reset works.
+
+NOTE: counter increments on requests that FAIL schema validation (400), not on accepted/served messages. User-facing copy (guest footer) promises '3 messages/minute'.
